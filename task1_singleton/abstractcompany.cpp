@@ -1,7 +1,8 @@
 #include "abstractcompany.h"
 
-AbstractCompany::AbstractCompany(const QString &name)
-    : companyName(name)
+AbstractCompany::AbstractCompany(const QString &name, QObject *parent)
+    : QObject(parent)
+    , companyName(name)
     , companyIncome(0.)
     , companyArea(0.)
     , employeeNumber(0)

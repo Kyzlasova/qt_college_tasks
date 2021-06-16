@@ -1,20 +1,22 @@
 #pragma once
 
+#include <QObject>
 #include <QString>
 #include <QList>
 
 /*!
  * \brief The AbstractCompany class это абстрактный базовый класс, как в задании и надо
  */
-class AbstractCompany
+class AbstractCompany: public QObject
 {
+    Q_OBJECT
 public:
     /*!
      * \brief The CompanyType enum это перечисление для типов компаний
      */
     enum CompanyType
     {
-        HEAVY_INDUSTRY_COMPANY_TYPE,
+        HEAVY_INDUSTRY_COMPANY_TYPE = 1,
         AGRICULTURAL_COMPANY_TYPE,
         OIL_COMPANY_TYPE,
         FISHING_COMPANY_TYPE,
@@ -23,8 +25,9 @@ public:
         FINANCIAL_COMPANY_TYPE,
         COMPANY_TYPE_COUNT
     };
+    Q_ENUM(CompanyType)
 
-    explicit AbstractCompany(const QString& name);
+    explicit AbstractCompany(const QString& name, QObject* parent = nullptr);
 
     virtual ~AbstractCompany() {}
 
