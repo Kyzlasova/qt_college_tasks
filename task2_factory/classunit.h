@@ -33,6 +33,3 @@ protected:
     using Fields = std::list<std::shared_ptr<Unit>>;
     std::vector<Fields> m_fields;
 };
-
-const std::vector<std::string> ClassUnit::ACCESS_MODIFIERS = {"public", "protected", "private", "internal", "protected internal", "private protected"};
-
