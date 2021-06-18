@@ -7,6 +7,8 @@ SOURCES += \
         classunit.cpp \
         cppclassunit.cpp \
         cppmethodunit.cpp \
+        csharpclassunit.cpp \
+        csharpmethodunit.cpp \
         main.cpp
 
 HEADERS += \
@@ -16,6 +18,10 @@ HEADERS += \
     cppfactory.h \
     cppmethodunit.h \
     cppprintoperatorunit.h \
+    csharpclassunit.h \
+    csharpfactory.h \
+    csharpmethodunit.h \
+    csharpprintoperatorunit.h \
     methodunit.h \
     printoperatorunit.h \
     unit.h

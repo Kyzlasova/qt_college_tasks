@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "cppfactory.h"
+#include "csharpfactory.h"
 
 namespace  {
 std::string generateProgram()
@@ -15,6 +16,8 @@ std::string generateProgram()
         {
         case 0:
             factory = new CppFactory(); break;
+        case 1:
+            factory = new CsharpFactory(); break;
         default:
             continue;
         }
