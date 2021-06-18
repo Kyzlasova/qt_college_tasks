@@ -9,6 +9,8 @@ SOURCES += \
         cppmethodunit.cpp \
         csharpclassunit.cpp \
         csharpmethodunit.cpp \
+        javaclassunit.cpp \
+        javamethodunit.cpp \
         main.cpp
 
 HEADERS += \
@@ -22,6 +24,10 @@ HEADERS += \
     csharpfactory.h \
     csharpmethodunit.h \
     csharpprintoperatorunit.h \
+    javaclassunit.h \
+    javafactory.h \
+    javamethodunit.h \
+    javaprintoperatorunit.h \
     methodunit.h \
     printoperatorunit.h \
     unit.h
