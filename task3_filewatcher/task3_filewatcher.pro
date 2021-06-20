@@ -4,6 +4,7 @@ CONFIG += c++11 console
 CONFIG -= app_bundle
 
 SOURCES += \
+    diagramupdater.cpp \
     filetablemodel.cpp \
     individualfilestrategy.cpp \
     mainwindow.cpp \
@@ -12,11 +13,11 @@ SOURCES += \
 
 HEADERS += \
     abstractstrategy.h \
+    diagramupdater.h \
     filetablemodel.h \
     individualfilestrategy.h \
     mainwindow.h \
-    overallfilestrategy.h \
-    statsupdater.h
+    overallfilestrategy.h
 
 FORMS += \
     mainwindow.ui

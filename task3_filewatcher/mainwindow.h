@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 
-#include "StatsUpdater.h"
+#include "diagramupdater.h"
 
 namespace QtCharts {
 class QChartView;
@@ -36,21 +36,23 @@ private slots:
 
     void on_comboBox_currentIndexChanged(int index);
 
+    void on_pushButton_clicked();
+
 private:
     void updateStats();
 
 private:
     Ui::MainWindow *ui;
-    QSharedPointer<AbstractStrategy> strat1;
-    QSharedPointer<AbstractStrategy> strat2;
-    QFileSystemModel *treeModel;
-    FileTableModel* customModel;
+    QSharedPointer<AbstractStrategy> individual_strategy_;
+    QSharedPointer<AbstractStrategy> folder_strategy_;
+    QFileSystemModel *left_tree_model_;
+    FileTableModel* my_custom_table_model_;
 
     QSharedPointer<QtCharts::QChart> chart;
     QSharedPointer<QtCharts::QValueAxis> axisY;
     QtCharts::QChartView *chartView;
 
-    std::vector<StatsUpdater> updaters;
+    std::vector<QSharedPointer<AbstractDiagramUpdater>> statmakers_;
 };
 
 #endif // MAINWINDOW_H

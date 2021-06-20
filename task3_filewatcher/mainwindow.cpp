@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QFileSystemModel>
+#include <QFileDialog>
 #include <QVBoxLayout>
 #include <QtCharts/QChartView>
 #include <QtCharts/QChart>
@@ -14,29 +15,27 @@
 #include "overallfilestrategy.h"
 #include "filetablemodel.h"
 
-//#include <QDebug>
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , strat1(new IndividualFileStrategy)
-    , strat2(new OverallFolderStrategy)
-    , treeModel(new QFileSystemModel(this))
-    , customModel(new FileTableModel(this))
+    , individual_strategy_(new IndividualFileStrategy)
+    , folder_strategy_(new OverallFolderStrategy)
+    , left_tree_model_(new QFileSystemModel(this))
+    , my_custom_table_model_(new FileTableModel(this))
     , chart(new QtCharts::QChart)
     , axisY(new QtCharts::QValueAxis)
     , chartView(new QtCharts::QChartView(chart.data(), this))
 {
     ui->setupUi(this);
 
-    ui->treeView->setModel(treeModel);
+    ui->treeView->setModel(left_tree_model_);
     ui->treeView->header()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->treeView->setRootIndex(treeModel->setRootPath(QDir::homePath()));
+    ui->treeView->setRootIndex(left_tree_model_->setRootPath(QDir::homePath()));
 
-    ui->tableView->setModel(customModel);
+    ui->tableView->setModel(my_custom_table_model_);
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    customModel->setStatisticsStrategy(strat1);
+    my_custom_table_model_->setStatisticsStrategy(individual_strategy_);
 
     // ---
 
@@ -49,40 +48,10 @@ MainWindow::MainWindow(QWidget *parent)
     chart->addAxis(axisY.data(), Qt::AlignLeft);
     chart->legend()->setVisible(true);
     chart->legend()->setAlignment(Qt::AlignBottom);
-//    chart->addAxis(axisY.data(), Qt::AlignLeft);
 
-    updaters.emplace_back([this](const QString& path){
-        customModel->UpdateStatistics(path);
-    });
-
-    updaters.emplace_back([this](const QString& path){
-        customModel->UpdateStatistics(path);
-        bool fileMode = ui->radioButton->isChecked();
-
-        chart->removeAllSeries();
-        QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
-        auto info = customModel->currentStrategy()->GetStatistics();
-        for (auto& name : info.keys()) {
-            series->append(fileMode ? QFileInfo(name).fileName() : name, info[name]);
-        }
-        chart->addSeries(series);
-    });
-
-    updaters.emplace_back([this](const QString& path){
-        customModel->UpdateStatistics(path);
-        bool fileMode = ui->radioButton->isChecked();
-
-        chart->removeAllSeries();
-        QtCharts::QBarSeries *series = new QtCharts::QBarSeries();
-        auto info = customModel->currentStrategy()->GetStatistics();
-        for (auto& name : info.keys()) {
-            QtCharts::QBarSet *set0 = new QtCharts::QBarSet(fileMode ? QFileInfo(name).fileName() : name);
-            *set0<< info[name];
-            series->append(set0);
-        }
-        chart->addSeries(series);
-        series->attachAxis(axisY.data());
-    });
+    statmakers_.emplace_back(QSharedPointer<TableUpdater>::create(my_custom_table_model_, chart, nullptr));
+    statmakers_.emplace_back(QSharedPointer<PieChartUpdater>::create(my_custom_table_model_, chart, axisY));
+    statmakers_.emplace_back(QSharedPointer<BarChartUpdater>::create(my_custom_table_model_, chart, axisY));
 }
 
 MainWindow::~MainWindow()
@@ -93,14 +62,14 @@ MainWindow::~MainWindow()
 void MainWindow::on_treeView_clicked(const QModelIndex &index)
 {
     if (index.isValid()) {
-        updaters[ui->comboBox->currentIndex()].doUpdate(treeModel->filePath(index));
+        statmakers_[ui->comboBox->currentIndex()]->doUpdate(left_tree_model_->filePath(index));
     }
 }
 
 void MainWindow::on_radioButton_toggled(bool checked)
 {
     if (checked) {
-        customModel->setStatisticsStrategy(strat1);
+        my_custom_table_model_->setStatisticsStrategy(individual_strategy_);
         updateStats();
     }
 }
@@ -108,7 +77,7 @@ void MainWindow::on_radioButton_toggled(bool checked)
 void MainWindow::on_radioButton_2_clicked(bool checked)
 {
     if (checked) {
-        customModel->setStatisticsStrategy(strat2);
+        my_custom_table_model_->setStatisticsStrategy(folder_strategy_);
         updateStats();
     }
 }
@@ -122,5 +91,15 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
 void MainWindow::updateStats()
 {
     const QModelIndex& currentIndex = ui->treeView->currentIndex();
-    updaters[ui->comboBox->currentIndex()].doUpdate(treeModel->filePath(currentIndex));
+    statmakers_[ui->comboBox->currentIndex()]->doUpdate(left_tree_model_->filePath(currentIndex));
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Выберите папку"),
+                                                    QDir::homePath(),  QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (!dir.isEmpty()) {
+        ui->treeView->setRootIndex(left_tree_model_->setRootPath(dir));
+        updateStats();
+    }
 }

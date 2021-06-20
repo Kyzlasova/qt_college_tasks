@@ -43,10 +43,10 @@ QVariant FileTableModel::headerData(int section, Qt::Orientation orientation, in
 {
     if (orientation == Qt::Horizontal) {
         if (section == 0 && role == Qt::DisplayRole)
-            return "Name";
+            return "Имя";
 
         if (section == 1 && role == Qt::DisplayRole)
-            return "Percentage";
+            return "В процентах";
     }
 
     return QAbstractTableModel::headerData(section, orientation, role);
