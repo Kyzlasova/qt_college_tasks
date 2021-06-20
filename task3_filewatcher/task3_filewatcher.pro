@@ -1,9 +1,10 @@
-QT += core gui widgets
+QT += core gui widgets charts
 
 CONFIG += c++11 console
 CONFIG -= app_bundle
 
 SOURCES += \
+    filetablemodel.cpp \
     individualfilestrategy.cpp \
     mainwindow.cpp \
     overallfilestrategy.cpp \
@@ -11,11 +12,13 @@ SOURCES += \
 
 HEADERS += \
     abstractstrategy.h \
+    filetablemodel.h \
     individualfilestrategy.h \
     mainwindow.h \
-    overallfilestrategy.h
-
-DESTDIR = $$PWD/../out
+    overallfilestrategy.h \
+    statsupdater.h
 
 FORMS += \
     mainwindow.ui
+
+DESTDIR = $$PWD/../out

@@ -36,6 +36,9 @@
          <property name="text">
           <string>По именам</string>
          </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -61,7 +64,7 @@
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Вид диаграммы</string>
+          <string>Вид диаграммы:</string>
          </property>
         </widget>
        </item>
@@ -74,12 +77,12 @@
          </item>
          <item>
           <property name="text">
-           <string>Столбчатая диаграмма</string>
+           <string>Круговая диаграмма</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Круговая диаграмма</string>
+           <string>Столбчатая диаграмма</string>
           </property>
          </item>
         </widget>
@@ -93,7 +96,35 @@
        <enum>Qt::Horizontal</enum>
       </property>
       <widget class="QTreeView" name="treeView"/>
-      <widget class="QTableView" name="tableView"/>
+      <widget class="QStackedWidget" name="stackedWidget">
+       <widget class="QWidget" name="page">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QTableView" name="tableView">
+           <attribute name="verticalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="page_2"/>
+      </widget>
      </widget>
     </item>
    </layout>

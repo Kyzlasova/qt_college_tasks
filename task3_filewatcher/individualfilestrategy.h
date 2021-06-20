@@ -5,7 +5,7 @@
 
 #include "abstractstrategy.h"
 
-class IndividualFileStrategy : public AbsrtractStrategy
+class IndividualFileStrategy : public AbstractStrategy
 {
 public:
     void Calculate(const QString& path) override;
