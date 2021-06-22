@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QMetaEnum>
 #include <time.h>
+#include <stdexcept>
 
 #include "abstractcompany.h"
 #include "companyregistry.h"
