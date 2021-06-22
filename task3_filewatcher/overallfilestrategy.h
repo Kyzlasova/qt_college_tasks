@@ -3,7 +3,7 @@
 #include "abstractstrategy.h"
 #include <QHash>
 
-class OverallFolderStrategy : public AbsrtractStrategy
+class OverallFolderStrategy : public AbstractStrategy
 {
 public:
     void Calculate(const QString& path);
